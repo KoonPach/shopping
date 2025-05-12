@@ -1,7 +1,7 @@
 <?php
 
 //var url
-$base_url = 'http://localhost/shoppingcart/';
+$base_url = 'http://localhost/shopping/';
 
 //database connection
 $host = 'localhost';

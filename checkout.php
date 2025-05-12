@@ -29,66 +29,83 @@ $total = 0;
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="container my-5">
-    <h1 class="text-center mb-4">Checkout</h1>
+<body class="bg-light">
 
-    <?php if ($rows > 0): ?>
-        <table class="table table-bordered">
-            <thead class="table-dark">
-                <tr>
-                    <th>Product Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($product = mysqli_fetch_assoc($query)): ?>
-                    <?php
-                    $quantity = $_SESSION['cart'][$product['id']];
-                    $subtotal = $product['price'] * $quantity;
-                    $total += $subtotal;
-                    ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($product['product_name']); ?></td>
-                        <td><?php echo number_format($product['price'], 2); ?></td>
-                        <td><?php echo $quantity; ?></td>
-                        <td><?php echo number_format($subtotal, 2); ?></td>
-                    </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
+<div class="container my-5">
+    <div class="card shadow-lg">
+        <div class="card-body p-4">
 
-        <h3 class="text-end">Total: <?php echo number_format($total, 2); ?></h3>
+            <h2 class="text-center mb-4 text-primary">Checkout</h2>
 
-        <form action="process_checkout.php" method="POST" class="mt-4">
-            <div class="mb-3">
-                <label for="fullname" class="form-label">Fullname:</label>
-                <input type="text" id="fullname" name="fullname" class="form-control" required>
-            </div>
+            <?php if ($rows > 0): ?>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover align-middle">
+                        <thead class="table-dark text-center">
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Price (THB)</th>
+                                <th>Quantity</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php while ($product = mysqli_fetch_assoc($query)): ?>
+                                <?php
+                                $quantity = $_SESSION['cart'][$product['id']];
+                                $subtotal = $product['price'] * $quantity;
+                                $total += $subtotal;
+                                ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($product['product_name']); ?></td>
+                                    <td class="text-end"><?php echo number_format($product['price'], 2); ?></td>
+                                    <td class="text-center"><?php echo $quantity; ?></td>
+                                    <td class="text-end text-success fw-semibold"><?php echo number_format($subtotal, 2); ?></td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                </div>
 
-            <div class="mb-3">
-                <label for="email" class="form-label">Email:</label>
-                <input type="email" id="email" name="email" class="form-control" required>
-            </div>
+                <h4 class="text-end text-danger mt-3">Total: <span class="fw-bold"><?php echo number_format($total, 2); ?> THB</span></h4>
 
-            <div class="mb-3">
-                <label for="phone" class="form-label">Phone:</label>
-                <input type="tel" id="phone" name="phone" class="form-control" required>
-            </div>
+                <hr class="my-4">
 
-            <div class="mb-3">
-                <label for="address" class="form-label">Address:</label>
-                <textarea id="address" name="address" class="form-control" required></textarea>
-            </div>
+                <h5 class="mb-3">Shipping Information</h5>
+                <form action="process_checkout.php" method="POST">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="fullname" class="form-label">Full Name</label>
+                            <input type="text" id="fullname" name="fullname" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="tel" id="phone" name="phone" class="form-control" required>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea id="address" name="address" class="form-control" rows="3" required></textarea>
+                        </div>
+                    </div>
 
-            <button type="submit" class="btn btn-primary">Place Order</button>
-        </form>
-    <?php else: ?>
-        <p class="text-center">Your cart is empty. <a href="index.php" class="btn btn-link">Go back to shopping</a>.</p>
-    <?php endif; ?>
+                    <div class="text-end mt-4">
+                        <button type="submit" class="btn btn-primary px-4">Place Order</button>
+                        <a href="index.php" class="btn btn-outline-secondary ms-2">← Continue Shopping</a>
+                    </div>
+                </form>
+            <?php else: ?>
+                <div class="alert alert-info text-center">
+                    Your cart is empty. <a href="index.php" class="btn btn-link">Go back to shopping</a>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

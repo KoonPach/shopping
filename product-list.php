@@ -1,5 +1,5 @@
 <?php
-session_start(); // Start the session
+session_start(); 
 include 'config.php';
 
 //product all
@@ -19,50 +19,60 @@ $rows = mysqli_num_rows($query);
     <link href="<?php echo $base_url; ?>/assets/fontawesome/css/fontawesome.min.css" rel="stylesheet">
     <link href="<?php echo $base_url; ?>/assets/fontawesome/css/brands.min.css" rel="stylesheet">
     <link href="<?php echo $base_url; ?>/assets/fontawesome/css/solid.css" rel="stylesheet">
+    <link href="<?php echo $base_url; ?>/product-list.css" rel="stylesheet">
+
 </head>
-<body class="bg-body-tertiary">
+<body class="bg-light">
     <?php include 'include/menu.php'; ?>
-
-    <div class="container" style=" margin-top: 30px;">
+    
+    <div class="container mt-4">
         <?php if(!empty($_SESSION['message'])): ?>
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <?php echo $_SESSION['message']; ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            <?php unset($_SESSION['message']); ?>
-            <?php endif; ?>
-
-
-        <h4>Product List</h4>
-        <div class="row d-flex justify-content-center">
+        <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert">
+            <i class="fa-solid fa-circle-info me-2"></i><?php echo $_SESSION['message']; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <?php unset($_SESSION['message']); ?>
+        <?php endif; ?>
+        
+        
+        
+        <div class="row g-4">
             <?php if ($rows > 0): ?>
                 <?php while ($product = mysqli_fetch_assoc($query)): ?>
-                    <div class="col-3 mb-3">
-                        <div class="card" style="width: 18rem;">
-                                <?php if (!empty($product['profile_image'])): ?>
-                                <img src="<?php echo $base_url; ?>/upload_image/<?php echo $product['profile_image']; ?>" class="card-img-top img-fluid" alt="Product Image" style="width: 200px; height: 200px;">
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="product-card card h-100">
+                        <div class="product-image-container">
+                            <?php if (!empty($product['profile_image'])): ?>
+                            <img src="<?php echo $base_url; ?>/upload_image/<?php echo $product['profile_image']; ?>" class="product-image" alt="<?php echo $product['product_name']; ?>">
                             <?php else: ?>
-                                <img src="<?php echo $base_url; ?>/upload_image/no-image.png" class="card-img-top img-fluid" alt="Product Image" style="width: 200px; height: 200px;">
+                            <img src="<?php echo $base_url; ?>/upload_image/no-image.png" class="product-image" alt="No Image Available">
                             <?php endif; ?>
-
-                            <div class="card-body">
-                                <h5 class="card-title"><?php echo $product['product_name']; ?></h5>
-                                <p class="card-text text-seccess fw-bold mb-0"><?php echo number_format($product['price'], 2); ?> Baht</p>
-                                <p class="card-text text-muted"><?php echo nl2br($product['detail']); ?></p>
-                            
-                                <a href="<?php echo $base_url; ?>/cart-add.php?id=<?php echo $product['id']; ?>" class="btn btn-primary w-100"><i class="fa-solid fa-cart-plus"></i> Add Cart</a>
-                            </div>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title" title="<?php echo $product['product_name']; ?>"><?php echo $product['product_name']; ?></h5>
+                            <p class="price fw-bold mb-1"><?php echo number_format($product['price'], 2); ?> Baht</p>
+                            <p class="card-text text-muted detail-text mb-3"><?php echo nl2br($product['detail']); ?></p>
+                            <a href="<?php echo $base_url; ?>/cart-add.php?id=<?php echo $product['id']; ?>" class="btn btn-primary cart-btn mt-auto">
+                                <i class="fa-solid fa-cart-plus me-2"></i>Add to Cart
+                            </a>
                         </div>
                     </div>
+                </div>
                 <?php endwhile; ?>
             <?php else: ?>
-                <div class="col-12 text-center">
-                    <h5>No products available</h5>
+                <div class="col-12">
+                    <div class="card shadow text-center py-5">
+                        <div class="card-body">
+                            <i class="fa-solid fa-store fa-3x text-muted mb-3"></i>
+                            <h4>No products available</h4>
+                            <p class="text-muted">Check back later for new products</p>
+                        </div>
+                    </div>
                 </div>
             <?php endif; ?>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 </body>
 </html>
